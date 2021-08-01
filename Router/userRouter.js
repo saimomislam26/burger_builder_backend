@@ -27,11 +27,28 @@ const newUser = async (req, res) => {
     });
 
 }
+const authUser = async (req, res) => {
+
+    const user = await User.findOne({ email: req.body.email })
+    if (!user) return res.status(400).send("Invalid mail");
+
+    const pass = await bcrypt.compare(req.body.password, user.password)
+    if (!pass) return res.status(400).send("incorrect Password!!");
+
+    let token = user.generateJWT();
+    res.send({
+        token: token,
+        data: _.pick(user, ['_id', 'email'])
+    })
+
+
+
+}
 
 
 router.route('/')
     .post(newUser)
-router.route('./auth')
-    .post()
+router.route('/auth')
+    .post(authUser)
 
 module.exports = router

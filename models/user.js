@@ -28,6 +28,7 @@ userSchema.methods.generateJWT = function () {
         })
     return token;
 }
+//if i want create password conditions using joi password complexity
 const complexityOptions = {
     min: 4,
     max: 30,
